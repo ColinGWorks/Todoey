@@ -33,6 +33,21 @@ class CategoryViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return categoryArray.count
     }
+    
+    //MARK: - TableView Delegate Methods
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        performSegue(withIdentifier: "goToItems", sender: self)
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        let destinationVC = segue.destination as! TodoListViewController
+        
+        if let indexPath = tableView.indexPathForSelectedRow {
+            destinationVC.selectedCategory = categoryArray[indexPath.row]
+        }
+    }
+    
 
     //MARK: - Data Manipulation Methods
     func loadCategories(with request: NSFetchRequest<Category> = Category.fetchRequest()) {
@@ -59,7 +74,7 @@ class CategoryViewController: UITableViewController {
     
     //MARK: - Add New Categories
     @IBAction func addButtonPressed(_ sender: UIBarButtonItem) {
-        let alert = UIAlertController(title: "Add new Todoey Category", message: nil, preferredStyle: .alert)
+        let alert = UIAlertController(title: "Add new Todoey Category", message: "", preferredStyle: .alert)
         
         var textField = UITextField()
         
@@ -82,11 +97,5 @@ class CategoryViewController: UITableViewController {
         
         present(alert, animated: true, completion: nil)
     }
-    
-
-    
-    //MARK: - TableView Delegate Methods
-    
-
     
 }
